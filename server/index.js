@@ -23,8 +23,25 @@ const uploadFile = function (file) {
     })
 }
 
+const getBucket = function () {
+    return new Promise((resolve, reject) => {
+        var params = { Bucket: process.env.BUCKET_NAME };
+        s3.listObjects(params, function (err, data) {
+            if (err) reject(console.log(err, err.stack))
+            else resolve(console.log(data));
+        })
+    })
+}
+
 
 module.exports = function (request, reply) {
+    return getBucket().then(() => {
+        reply({ success: true })
+    }).catch((err) => {
+        console.log('Error:' + err)
+    })
+
+    /*
     console.log(request.payload)
     console.log(process.env.BUCKET_NAME)
 
@@ -33,4 +50,5 @@ module.exports = function (request, reply) {
     }).catch((err) => {
         console.log('Error:' + err)
     })
+    */
 }
